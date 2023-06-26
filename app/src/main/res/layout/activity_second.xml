@@ -1,60 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".SecondActivity">
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textSize="34sp"
+    <RelativeLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:background="@drawable/background_top">
 
-        />
-
-
-    <Button
-        android:id="@+id/contactsOpt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Edit Contacts" />
-
-
-
-
-        <!-- Other views and layout components -->
-
-        <Button
-            android:id="@+id/signOutBtn"
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:text="SignOut" />
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="80dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/main_info"
+            android:textColor="#ffffff"
+            android:textSize="28sp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            app:srcCompat="@mipmap/top_1"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="casual"
+            android:text="@string/secondary_info"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:layout_below="@id/textView"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+
+    <GridLayout
+        android:id="@+id/buttonGridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:rowCount="2"
+        android:columnCount="2"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:useDefaultMargins="true"
+        android:alignmentMode="alignMargins"
+        android:layout_weight="1">
+
+
+        <Button
+            android:id="@+id/contactsOpt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_gravity="fill"
+            android:layout_margin="8dp"
+            android:text="@string/emergency_contacts"
+            android:background="@drawable/button_bg" />
+
+
+        <Button
+            android:id="@+id/tipsButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_gravity="fill"
+            android:layout_margin="8dp"
+            android:text="@string/basic_tips"
+            android:background="@drawable/button_bg" />
+
 
         <Button
             android:id="@+id/sendLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/signOutBtn"
-            android:layout_centerHorizontal="true"
-            android:text="Send Location" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_gravity="fill"
+            android:layout_margin="8dp"
+            android:text="@string/send_message"
+            android:background="@drawable/button_bg" />
 
-    <TextView
-        android:id="@+id/topTextView"
+
+        <Button
+            android:id="@+id/signOutBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_gravity="fill"
+            android:layout_margin="8dp"
+            android:text="@string/sign_out"
+            android:background="@drawable/button_bg" />
+
+    </GridLayout>
+
+
+    <LinearLayout
+        android:id="@+id/footerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:padding="16dp"
-        android:textSize="18sp"
-        android:textColor="#000000"
-        tools:text="xfdx" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp">
 
 
-</RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_name"
+            android:textSize="14sp"
+            android:textColor="#808080" />
+
+    </LinearLayout>
+
+</LinearLayout>

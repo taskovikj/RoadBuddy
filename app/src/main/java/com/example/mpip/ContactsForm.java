@@ -7,16 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.example.mpip.model.Contact;
-import com.example.mpip.model.contactDB;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import com.example.mpip.repository.Contact;
+import com.example.mpip.repository.contactDB;
 
 public class ContactsForm extends AppCompatActivity {
     EditText editName, editPhone;
-    Button saveContact;
+    Button saveContact, editContacts;
     contactDB contactDB2;
 
     @Override
@@ -24,30 +22,50 @@ public class ContactsForm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_form);
 
-
         editName = findViewById(R.id.editTextName);
         editPhone = findViewById(R.id.editTextPhone);
         saveContact = findViewById(R.id.buttonSave);
+        editContacts = findViewById(R.id.contactList);
 
-        contactDB contactDB2 = com.example.mpip.model.contactDB.getDB(this);
+        contactDB2 = contactDB.getDB(this);
 
         saveContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              String name = editName.getText().toString();
-              String phone = (editPhone.getText().toString());
+                String name = editName.getText().toString();
+                String phone = editPhone.getText().toString();
 
-                contactDB2.contactDao().addContact(
-                        new Contact(name,phone)
-                );
-                editName.setText("");
-                editPhone.setText("");
+                if (isNameValid(name) && isPhoneNumberValid(phone)) {
+                    contactDB2.contactDao().addContact(new Contact(name, phone));
+                    editName.setText("");
+                    editPhone.setText("");
+                } else {
+                    // Show an error message indicating invalid information
+                    if (!isNameValid(name)) {
+                        Toast.makeText(ContactsForm.this, "Invalid name", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ContactsForm.this, "Invalid phone number", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
 
+        editContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(ContactsForm.this, ContactListActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 
+    private boolean isNameValid(String name) {
+        return name.matches(".*[a-zA-Z].*");
+    }
 
-
+    private boolean isPhoneNumberValid(String phoneNumber) {
+        return phoneNumber.matches("^07\\d{7}$");
     }
 
 
@@ -58,12 +76,4 @@ public class ContactsForm extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private String formatNumber(String phoneNumber) {
-        char[] charArray = phoneNumber.toCharArray();
-//        071798356
-//        "+389-71-798-356"
-        StringBuilder formattedNumber = new StringBuilder("+389-" + charArray[1] + charArray[2] + "-" + charArray[3] + charArray[4] + charArray[5] + "-" + charArray[6] + charArray[7] + charArray[8]);
-
-        return formattedNumber.toString();
-    }
 }

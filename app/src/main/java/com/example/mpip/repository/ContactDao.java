@@ -1,4 +1,4 @@
-package com.example.mpip.model;
+package com.example.mpip.repository;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -26,6 +26,9 @@ public interface ContactDao {
 
     @Delete
     void deleteContact(Contact contact);
+
+    @Query("DELETE FROM contact")
+    void deleteAllContacts();
 
 
 

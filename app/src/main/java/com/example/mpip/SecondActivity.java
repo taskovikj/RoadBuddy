@@ -3,30 +3,23 @@ package com.example.mpip;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
-import androidx.room.Room;
-
 
 import android.Manifest;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mpip.model.Contact;
-import com.example.mpip.model.contactDB;
+import com.example.mpip.repository.Contact;
+import com.example.mpip.repository.contactDB;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -41,7 +34,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -52,11 +44,11 @@ public class SecondActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
     TextView name;
-    Button singOutBTN, buttonNext, sendLocation;
+    Button singOutBTN, buttonNext, sendLocation, tipsButton;
     String lat, lon, add, city, country;
     TextView txtTst;
     contactDB contactDB2;
-    private static final String channelId = "my_channel_id";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,32 +57,19 @@ public class SecondActivity extends AppCompatActivity {
 
         contactDB2 = contactDB.getDB(this);
 
-        name = findViewById(R.id.name);
         singOutBTN = findViewById(R.id.signOutBtn);
         buttonNext = findViewById(R.id.contactsOpt);
         sendLocation = findViewById(R.id.sendLocation);
+        tipsButton = findViewById(R.id.tipsButton);
+
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        txtTst = findViewById(R.id.topTextView);
-
-
-        // Check if the device is running on Android Oreo or higher
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence channelName = "My Channel";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-
-
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
 
         GoogleSignInAccount acc = GoogleSignIn.getLastSignedInAccount(this);
         if (acc != null) {
             String userName = acc.getDisplayName();
-            name.setText(userName);
         }
 
         sendLocation.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +94,15 @@ public class SecondActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        tipsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                Intent intent = new Intent(SecondActivity.this, TipsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void sendSmsToAllContacts() {
@@ -123,9 +111,8 @@ public class SecondActivity extends AppCompatActivity {
         for (Contact contact : contacts) {
             String phoneNumber = contact.getPhoneNumber();
             String GoogleMapsLink = "https://www.google.com/maps?q=" + lat + "," + lon;
-            String message = "Hello, "+ contact.getName()+" I have a problem with my car. Here is my location " +GoogleMapsLink;
+            String message = "Hello, " + contact.getName() + " I have a problem with my car. Here is my location " + GoogleMapsLink;
 
-            // Send SMS
             try {
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(phoneNumber, null, message, null, null);
@@ -135,25 +122,6 @@ public class SecondActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
-        if (contacts.size() > 0) {
-            // Create the notification builder
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
-                    .setContentTitle("Message Sent")
-                    .setContentText("All messages have been sent successfully!")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-            // Generate a unique notification ID
-            int notificationId = new Random().nextInt();
-
-            // Show the notification
-            NotificationManager notificationManager = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                notificationManager = getSystemService(NotificationManager.class);
-            }
-            notificationManager.notify(notificationId, builder.build());
-        }
-
     }
 
     private void getLastLocation() {
@@ -170,10 +138,6 @@ public class SecondActivity extends AppCompatActivity {
                                     addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                                     lat = String.valueOf(addresses.get(0).getLatitude());
                                     lon = String.valueOf(addresses.get(0).getLongitude());
-                                    add = String.valueOf(addresses.get(0).getAddressLine(0));
-                                    city = String.valueOf(addresses.get(0).getLocality());
-                                    country = String.valueOf(addresses.get(0).getCountryName());
-                                    txtTst.setText(lat + " " + lon);
                                     if (ContextCompat.checkSelfPermission(SecondActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
                                         sendSmsToAllContacts();
                                     } else {

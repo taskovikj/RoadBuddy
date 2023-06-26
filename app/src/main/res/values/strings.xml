@@ -14,5 +14,23 @@
     <string name="sign_in">Sign In</string>
     <string name="send_message">Send Message</string>
     <string name="google_sign_in">Sign in with Google</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="edit_contacts">Edit Contacts</string>
+    <string name="main_info">RoadBuddy</string>
+    <string name="secondary_info">Stay safe during travel</string>
+    <string name="basic_tips">Basic Tips</string>
+    <string name="contacts_list">Edit Contacts</string>
+    <string name="about_form">Add emergency contacts</string>
+    <string name="emergency_contacts">Emergency Contacts</string>
+    <string name="tip_tire">Flat Tire</string>
+    <string name="engine_sound">Engine Sounds</string>
+    <string name="transmision_problem">Transmission</string>
+    <string name="gas_out">No Gas</string>
+    <string name="lights">Lights</string>
+    <string name="hand_brake">Handbrake</string>
+    <string name="overheating">Overheating</string>
+    <string name="lost_key">Lost key</string>
+    <string name="car_accident">Car Accident</string>
+
 
 </resources>
